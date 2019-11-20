@@ -21,7 +21,7 @@ RUN pip3 install -r requirements.txt
 COPY . /usr/src/app
 
 # Set up all the configfiles
-COPY django_nginx.conf /etc/nginx/sites-available/default
+COPY nginx.conf /etc/nginx/
 COPY supervisor-app.conf /etc/supervisor/conf.d/
 
 # Expose the image's ports. We'll bind different host ports to these later
