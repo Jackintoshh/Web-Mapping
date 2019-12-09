@@ -21,11 +21,7 @@ RUN pip3 install -r requirements.txt
 COPY . /usr/src/app
 
 # Set up all the configfiles
-<<<<<<< HEAD
-COPY django_nginx.conf /etc/nginx/sites-available/default
-=======
 COPY nginx_conf.yml /etc/nginx/sites-available/default
->>>>>>> 40b19a7a32f103cfd73d892232d7252e776f2089
 COPY supervisor-app.conf /etc/supervisor/conf.d/
 
 # Expose the image's ports. We'll bind different host ports to these later
@@ -33,8 +29,5 @@ EXPOSE 80
 EXPOSE 443
 
 # When a new container is created, we'll run supervisord to start uwsgi and nginx.
-<<<<<<< HEAD
 CMD ["supervisord", "-n"]
-=======
-CMD ["supervisord", "-n"]
->>>>>>> 40b19a7a32f103cfd73d892232d7252e776f2089
+
