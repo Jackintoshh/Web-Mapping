@@ -26,7 +26,11 @@ SECRET_KEY = 'nbzqu7wc-vn0xg-@5k2^y7qw8hv-tpz6k1hcneuw#r@1(y*)y2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = []
+=======
+ALLOWED_HOSTS = ['*', ]
+>>>>>>> 40b19a7a32f103cfd73d892232d7252e776f2089
 
 
 # Application definition
@@ -154,4 +158,8 @@ LEAFLET_CONFIG = {
             'auto-include': True,
         },
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 40b19a7a32f103cfd73d892232d7252e776f2089
