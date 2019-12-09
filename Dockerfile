@@ -21,7 +21,7 @@ RUN pip3 install -r requirements.txt
 COPY . /usr/src/app
 
 # Set up all the configfiles
-COPY nginx.conf /etc/nginx/
+COPY nginx_conf.yml /etc/nginx/sites-available/default
 COPY supervisor-app.conf /etc/supervisor/conf.d/
 
 # Expose the image's ports. We'll bind different host ports to these later

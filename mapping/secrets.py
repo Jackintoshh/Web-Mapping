@@ -2,22 +2,23 @@
 def get_secrets():
     SECRETS = {
         'MY_DOMAIN_NAME': 'webmapping.jack-dev.live',
-        'DOCKER_IMAGE': 'jjwright50/webmapping',
+        'DOCKER_IMAGE': 'nginx_image6',
         'DOCKER_COMPOSE_FILE': 'docker-compose.yml',
-        'NGINX_CONF': 'django_nginx.conf',
+        'NGINX_CONF': 'nginx_conf.yml',
         'SECRET_KEY': 'nbzqu7wc-vn0xg-@5k2^y7qw8hv-tpz6k1hcneuw#r@1(y*)y2,
         'DATABASES': {
             'default': {
                 'ENGINE': 'django.contrib.gis.db.backends.postgis',
-                'NAME': 'webmapping',
-                'HOST': 'localhost',
+                'NAME': 'mappingDB',
+                'HOST': '178.128.167.4',
                 'PORT': 5432,
-                'USER': 'jack',
-                'PASSWORD': 'jack147w',
+                'USER': 'docker',
+                'PASSWORD': 'docker',
             }
         },
         'ALLOWED_HOSTNAMES': [
-            '*',
+            'webmapping.jack-dev.live',
+	    'LAPTOP-1AHNF5CO',
         ],
 
     }
@@ -27,7 +28,7 @@ def get_secrets():
 
 def insert_domainname_in_conf(conf_file, my_domain_name):
     try:
-        with open("nginx_conf_template", "r") as fh:
+        with open("nginx_conf.yml", "r") as fh:
             conf_text = fh.read()
         conf_text = conf_text.replace("webmapping.jack-dev.live", my_domain_name)
         with open(conf_file, "w") as fh:
@@ -38,9 +39,9 @@ def insert_domainname_in_conf(conf_file, my_domain_name):
 
 def insert_imagename_in_compose(compose_file, image_name):
     try:
-        with open("docker-compose-template", "r") as fh:
+        with open("docker-compose.yml", "r") as fh:
             conf_text = fh.read()
-        conf_text = conf_text.replace("webmapping.jack-dev.live", jjwright50/webmapping)
+        conf_text = conf_text.replace("webmapping.jack-dev.live", image_name)
         with open(compose_file, "w") as fh:
             fh.write(conf_text)
     except Exception as e:

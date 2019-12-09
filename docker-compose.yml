@@ -9,7 +9,7 @@ version: '3'
 
 services:
   app:
-    image: --your-image-name-goes-here--
+    image: nginx_image6
     restart: unless-stopped
 
     # Mount directories from the host which contain SSL cert info
@@ -19,6 +19,7 @@ services:
     ports:
       - "8000:80"
       - "8443:443"
+      - "8500:500"  
     # The following command commented out as it causes problems with uwsgi creating a UNIX socket file - not sure why at this point.
     # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 

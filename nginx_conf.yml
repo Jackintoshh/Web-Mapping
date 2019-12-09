@@ -39,8 +39,8 @@ server {
     #server_tokens off;
 
     # SSL cert info. These directories are from the host, mounted by docker-compose
-    ssl_certificate /etc/letsencrypt/live/--your-domainname-goes-here--/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/--your-domainname-goes-here--/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/webmapping.jack-dev.live/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/webmapping.jack-dev.live/privkey.pem;
     include /usr/src/app/options-ssl-nginx.conf;
     ssl_dhparam /usr/src/app/ssl-dhparams.pem;
 
