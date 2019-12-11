@@ -11,39 +11,59 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import socket
+from django.urls import path, include, reverse_lazy, reverse
+
+from . import secrets
+import fix_gdal
+
+fix_gdal.fix()
+
+
+
+SECRETS = secrets.get_secrets()
+secrets.insert_domainname_in_conf(SECRETS["NGINX_CONF"], SECRETS["MY_DOMAIN_NAME"])
+secrets.insert_imagename_in_compose(SECRETS["DOCKER_COMPOSE_FILE"], SECRETS["DOCKER_IMAGE"])
+
+## Need to change '/' to '\\' for Windows. Double backslash is because \ normally denotes an escape character
+if os.name == "nt":
+    secrets.insert_projectname_in_uwsgi_ini(__file__.split("\\")[-2], "uwsgi.ini")
+else:
+    secrets.insert_projectname_in_uwsgi_ini(__file__.split("/")[-2], "uwsgi.ini")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#import fix_gdal
-#fix_gdal.fix()
+
+
+
+GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, r'venv\Lib\site-packages\osgeo\gdal300.dll')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'nbzqu7wc-vn0xg-@5k2^y7qw8hv-tpz6k1hcneuw#r@1(y*)y2'
+SECRET_KEY = SECRETS["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 ALLOWED_HOSTS = ['*', ]
-
-
 
 # Application definition
 
 INSTALLED_APPS = [
     'django.contrib.gis',
-    'shops.apps.ShopsConfig',
+    # 'shops.apps.ShopsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'world.apps.WorldConfig',
+    # 'world.apps.WorldConfig',
     'pwa',
+    'shops'
 ]
 
 MIDDLEWARE = [
@@ -77,21 +97,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mapping.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'webmapping',
-        'HOST': 'localhost',
-        'USER': 'jack',
-        'PASSWORD': 'jack147w'
-
-    }
-}
-
+DATABASES = SECRETS["DATABASES"]
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -111,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -124,7 +132,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -149,7 +156,7 @@ PWA_APP_ICONS = [
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'shops/templates/shops', 'serviceworker.js')
 
 LEAFLET_CONFIG = {
-    'TILES': [('OSM','https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{"useCache": True, "crossOrigin": True})],
+    'TILES': [('OSM', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"useCache": True, "crossOrigin": True})],
     'PLUGINS': {
         'PouchDBCached': {
             'js': 'https://unpkg.com/leaflet.tilelayer.pouchdbcached@latest/L.TileLayer.PouchDBCached.js',
@@ -157,4 +164,3 @@ LEAFLET_CONFIG = {
         },
     }
 }
-

@@ -3,7 +3,7 @@
 {% load pwa %}
 <head>
 
-	<title>Quick Start - Leaflet</title>
+	<title>Miami Shops</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,12 +18,60 @@
 </head>
 <body>
 
+    <h1 style="text-align: center; font-family: 'Arial Black'">Shops in Miami</h1>
+    <script>
+        var count = 0;
+        var miamiShops = [];
+        var names = [];
+        var parsedLat = [];
+        var parsedLon = [];
+        var temp;
+
+    </script>
+    <div id="shopInfo2">
+    {% if shops %}
+    <ul>
+    {% for shop in shops %}
+        <li id="shopInfo" style="display:none">
+        {{ shop.name }}: {{shop.distance}}: {{ shop.location }}
+        <script>
+            miamiShops[count] = "{{ shop.location }}"
+            names[count] = "{{ shop.name }}"
+            count++;
+        </script>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    </div>
+    <div id="test">
+
+    </div>
+<div id="mapid" style="width: 1280px; height: 720px; margin: 0 auto;"></div>
 
 
-<div id="mapid" style="width: 600px; height: 400px;"></div>
 <script>
 
-	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+var index1, index2;
+
+
+        for(var i = 0; i < 99; i++)
+        {
+            index1 = miamiShops[i].indexOf("-");
+            index2 = miamiShops[i].indexOf(" ", index1);
+
+            parsedLon[i] = miamiShops[i].substring(index1, index2);
+
+            index1 = index2 + 1;
+            index2 = miamiShops[i].length - 1;
+
+            parsedLat[i] = miamiShops[i].substring(index1, index2);
+        }
+	var mymap = L.map('mapid').setView([parsedLat[0], parsedLon[0]], 13);
+
+
+
+
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -42,6 +90,14 @@
 		fillOpacity: 0.5
 	}).addTo(mymap).bindPopup("I am a circle.");
 
+	for(var i = 0; i < 99; i++)
+    {
+        L.circle([parsedLat[i], parsedLon[i]], 50, {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.5
+	}).addTo(mymap).bindPopup(names[i]);
+    }
 	L.polygon([
 		[51.509, -0.08],
 		[51.503, -0.06],
